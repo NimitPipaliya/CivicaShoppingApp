@@ -1,0 +1,69 @@
+<h1 style="display: block;">
+    Order history
+</h1>
+<div *ngIf="loading">
+  <img src="assets/loader.gif" alt="Loading...">
+  </div>
+  <table class="table table-striped text-center" *ngIf="!loading">
+      <thead>
+          <tr>
+              <th >Order Number</th>
+              <th  (click)="onClickSortWithDate()">Order Date
+                  <i *ngIf="flag == 'asc'" class="fas fa-sort-amount-up"></i>
+                  <i *ngIf="flag == 'desc'" class="fas fa-sort-amount-down"></i>
+              </th>
+          </tr>
+      </thead>
+  
+      <tbody>
+      
+              <tr *ngFor="let item of allOrders" class="pcursor">
+                  <td [routerLink]="['/order-summary-report/' + item.orderNumber]" routerLinkActive="router-link-active" ># {{item.orderNumber}}</td>
+                  <td>{{item.orderDate | date}}</td>
+              </tr>
+      </tbody>
+  </table>
+  
+  <div class="d-flex justify-content-between align-items-center pcursor">
+      <!-- Pagination controls -->
+      <ul class="pagination align-items-center">
+        <li class="page-item" [class.disabled]="pageNumber <= 1">
+          <a class="page-link" (click)="goToFirstPage()" aria-label="First">
+            <span aria-hidden="true"><i class="fa-solid fa-angles-left"></i></span>
+          </a>
+        </li>
+        <li class="page-item" [class.disabled]="pageNumber <= 1">
+          <a class="page-link" (click)="changePage(pageNumber - 1)" aria-label="Previous">
+            <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+          </a>
+        </li>
+  
+        <li *ngFor="let i of [].constructor(totalPages); let index = index" class="page-item"
+            [class.active]="pageNumber === index + 1">
+          <a class="page-link" (click)="changePage(index + 1)">{{ index + 1 }}</a>
+        </li>
+  
+        <li class="page-item" [class.disabled]="pageNumber >= totalPages">
+          <a class="page-link" (click)="changePage(pageNumber + 1)" aria-label="Next">
+            <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+          </a>
+        </li>
+        <li class="page-item" [class.disabled]="pageNumber >= totalPages">
+          <a class="page-link" (click)="goToLastPage()" aria-label="Last">
+            <span aria-hidden="true"><i class="fa-solid fa-angles-right"></i></span>
+          </a>
+        </li>
+      </ul>
+  
+      <div>
+        <label class="m-2" for="pageSize"><i class="fas fa-list mr-1"></i> Page Size:</label>
+        <select id="pageSize" [(ngModel)]="pageSize" (change)="changePageSize(pageSize)" class="form-control pcursor text-center">
+          <option [ngValue]="2">2</option>
+          <option [ngValue]="4">4</option>
+          <option [ngValue]="6">6</option>
+          <option [ngValue]="8">8</option>
+          <option [ngValue]="10">10</option>
+        </select>
+      </div>
+    </div>
+  

@@ -1,0 +1,96 @@
+<header>
+    <nav class="navbar fw-bold navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" [routerLink]="['/home']" routerLinkActive="router-link-active">
+                <img src="assets/CivicaWhiteLOGO.png" width="140" height="40"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link " [routerLink]="['/home']" routerLinkActive="router-link-active">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " [routerLink]="['/privacy']"
+                            routerLinkActive="router-link-active">Privacy</a>
+                    </li>
+                    <li *ngIf="username == 'admin'" class="nav-item">
+                        <a class="nav-link" [routerLink]="['/users']" routerLinkActive="router-link-active">Users</a>
+                    </li>
+                    <li *ngIf="username == 'admin'" class="nav-item">
+                        <a class="nav-link text-white" [routerLink]="['/products']"
+                            routerLinkActive="router-link-active">Products</a>
+                    </li>
+                    <!-- <li *ngIf="username == 'admin'" class="nav-item">
+                        <a class="nav-link text-white" [routerLink]="['/getquantityofproducts']"
+                            routerLinkActive="router-link-active">Quantity of Products</a>
+                    </li>
+                    <li *ngIf="username == 'admin'" class="nav-item">
+                        <a class="nav-link text-white" [routerLink]="['/productSales']"
+                            routerLinkActive="router-link-active">Product Sales</a>
+                    </li> -->
+                    <li *ngIf="username != 'admin'" class="nav-item">
+                        <a class="nav-link text-white" [routerLink]="['/buyProducts']"
+                            routerLinkActive="router-link-active">Buy Products</a>
+                    </li>
+                    <li *ngIf="username != 'admin' && isAuthenticated" class="nav-item">
+                        <a class="nav-link text-white" [routerLink]="['/cart']"
+                            routerLinkActive="router-link-active">Cart</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav ml-auto" *ngIf="!isAuthenticated">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" [routerLink]="['/signup']"
+                            routerLinkActive="router-link-active"><span class="fas fa-user-plus"></span> Sign Up </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" [routerLink]="['/signin']"
+                            routerLinkActive="router-link-active"><span class="fas fa-sign-in-alt"></span> Sign In</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav ml-auto" *ngIf="isAuthenticated">
+                    <!-- <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/changepassword']" routerLinkActive="router-link-active"><span>Changepassword</span></a>
+                </li> -->
+                    <li class="nav-item" *ngIf="username == 'admin'">
+                        <a class="nav-link text-white"><span class="fas fa-user"></span> {{ username }}</a>
+                    </li>
+                    <li ngbDropdown class="nav-item dropdown" *ngIf="username != 'admin'">
+                        <a ngbDropdownToggle class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
+                            aria-expanded="false">
+                            <span class="fas fa-user"> </span> {{ username }}
+                        </a>
+                        <div ngbDropdownMenu aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" routerLink="/changepassword">Change Password</a>
+                            <a class="dropdown-item" routerLink="/order-history">Order History</a>
+                            <!-- Add more dropdown items here as needed -->
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" (click)="signOut()" style="cursor:pointer;"
+                            routerLinkActive="router-link-active"><span class="fas fa-sign-in-alt"></span> <b> Sign
+                                Out</b></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <main role="main" class="pb-3">
+        <!-- <div id="autoCloseAlert" class="alert alert-danger alert-dismissible fade show">
+            <b>Error : </b>@errorMessage
+            <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div> -->
+        <!-- <div id="messageContainer" class="message-container"></div> -->
+        <router-outlet></router-outlet>
+    </main>
+</div>
+<footer class="border-top footer mt-5">
+    <div class="container d-flex justify-content-center">
+        <p>&copy; 2024 - Civica Shopping App - <a [routerLink]="['/privacy']"
+                routerLinkActive="router-link-active">Privacy</a></p>
+    </div>
+</footer>

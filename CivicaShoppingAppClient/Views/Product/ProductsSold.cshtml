@@ -1,0 +1,199 @@
+﻿@using CivicaShoppingAppClient.ViewModels
+@model List<ProductsSoldViewModel>
+<head>
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px; /* Add margin top for spacing */
+            margin-bottom: 20px; /* Add margin bottom for spacing */
+        }
+
+            .pagination li {
+                list-style-type: none; /* Remove default list styling */
+            }
+
+            .pagination .page-link {
+                color: #7b57cb; /* Default link color */
+                background-color: transparent;
+                border: 1px solid #dee2e6; /* Add border */
+                cursor: pointer;
+                transition: color 0.3s, background-color 0.3s, border-color 0.3s; /* Smooth transition */
+                padding: 0.5rem 0.75rem; /* Padding for the link */
+                border-radius: 0.25rem; /* Rounded corners */
+            }
+
+                .pagination .page-link:hover {
+                    color: #7b57cb; /* Darker blue color on hover */
+                    text-decoration: none; /* Remove underline on hover */
+                    border-color: #adb5bd; /* Adjust border color on hover */
+                }
+
+            .pagination .page-item.disabled .page-link {
+                color: #a5a2a2; /* Faded text color for disabled buttons */
+                pointer-events: none; /* Disable pointer events for disabled buttons */
+                background-color: #e9ecef;
+            }
+
+            .pagination .page-item.active .page-link {
+                background-color: #7b57cb; /* Active page background color */
+                color: #fff; /* Active page text color */
+                border-color: #7b57cb; /* Active page border color */
+                cursor: pointer;
+            }
+
+        .page-size-selection {
+            display: flex;
+            align-items: center;
+            margin-top: 10px; /* Adjust margin top */
+        }
+
+            .page-size-selection select {
+                margin-left: 10px; /* Add some spacing between the label and the select */
+            }
+
+        .custom-select {
+            border: 1px solid #ced4da; /* Add border */
+            padding: 0.375rem 2rem 0.375rem 1rem; /* Add padding */
+            font-size: 1rem; /* Set font size */
+            border-radius: 0.25rem; /* Add border radius */
+            background-color: #fff; /* Set background color */
+            background-image: none; /* Remove background image */
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; /* Add transition */
+        }
+
+            .custom-select:focus {
+                border-color: #80bdff; /* Set border color on focus */
+                outline: 0; /* Remove outline */
+                box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Add box shadow on focus */
+            }
+
+        .table {
+            margin-top: 20px; /* Add margin top for spacing */
+        }
+
+        /* Pagination buttons */
+        .pagination ul li.disabled a {
+            background-color: #fff; /* Light background color */
+            color: #6c757d; /* Text color */
+        }
+
+            /* Font Awesome arrows */
+            .pagination ul li.disabled a i {
+                color: #6c757d; /* Adjust icon color */
+            }
+    </style>
+</head>
+<h1>Products Sales Report</h1>
+<table class="table table-striped text-center">
+
+    <thead>
+        <tr>
+
+            <th style="cursor: pointer" onclick="changePage(1, '@ViewBag.PageSize', '!@ViewBag.SortOrder')">
+                Product
+                @if (ViewBag.SortOrder == "asc")
+                {
+                    <i class="fas fa-sort-amount-up"></i>
+                }
+                else
+                {
+                    <i class="fas fa-sort-amount-down"></i>
+                }
+            </th>
+            <th>Order Date</th>
+            <th>Quantity Sold</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var contact in Model)
+        {
+            <tr>
+                <td>@contact.ProductName</td>
+                <td>@contact.OrderDate.ToString("yyyy/MM/dd")</td>
+                <td>@contact.TotalQuantitySold</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<br />
+<!-- Pagination controls -->
+<div class="d-flex justify-content-between align-items-center">
+    <!-- Pagination controls -->
+    <ul class="pagination align-items-center">
+        <li class="page-item @(ViewBag.CurrentPage <= 1 ? "disabled" : "")">
+            <a class="page-link" onclick="changePage(1, '@ViewBag.PageSize', '@ViewBag.SortOrder')" aria-label="First">
+                <span aria-hidden="true"><i class="fa-solid fa-angles-left"></i></span>
+            </a>
+        </li>
+        <li class="page-item @(ViewBag.CurrentPage <= 1 ? "disabled" : "")">
+            <a class="page-link" onclick="changePage('@(ViewBag.CurrentPage - 1)', '@ViewBag.PageSize', '@ViewBag.SortOrder')" aria-label="Previous">
+                <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+            </a>
+        </li>
+
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                <a class="page-link" onclick="changePage('@i', '@ViewBag.PageSize', '@ViewBag.SortOrder')">@i</a>
+            </li>
+        }
+
+
+        <li class="page-item @(ViewBag.CurrentPage >= ViewBag.TotalPages ? "disabled" : "")">
+            <a class="page-link" onclick="changePage('@(ViewBag.CurrentPage + 1)', '@ViewBag.PageSize', '@ViewBag.SortOrder')" aria-label="Next">
+                <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+            </a>
+        </li>
+        <li class="page-item @(ViewBag.CurrentPage >= ViewBag.TotalPages ? "disabled" : "")">
+            <a class="page-link" onclick="changePage(@ViewBag.TotalPages, '@ViewBag.PageSize', '@ViewBag.SortOrder')" aria-label="Last">
+                <span aria-hidden="true"><i class="fa-solid fa-angles-right"></i></span>
+            </a>
+        </li>
+    </ul>
+
+    <div>
+        <label class="m-2" for="pageSize"><i class="fas fa-list mr-1"></i> Page Size:</label>
+        <select id="pageSize" value="@ViewBag.PageSize" onchange="changePage(1, this.value, '@ViewBag.SortOrder')" class="form-control pcursor text-center">
+            <option value="2">2</option>
+            <option value="4">4</option>
+            <option value="6">6</option>
+            <option value="8">8</option>
+        </select>
+    </div>
+</div>
+<a class="btn btn-secondary btn-sm" asp-action="Index"><i class="fas fa-list mr-1"></i> Back</a>
+<link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var currentPageSize = @(ViewBag.PageSize);
+        var pageSizeDropdown = document.getElementById("pageSize");
+        for (var i = 0; i < pageSizeDropdown.options.length; i++) {
+            if (pageSizeDropdown.options[i].value === currentPageSize.toString()) {
+                pageSizeDropdown.selectedIndex = i;
+                break;
+            }
+        }
+    });
+
+    function changePageSize(select) {
+        var pageSize = select.value;
+        window.location.href = "/Product/ProductsSold?page=1&pageSize=" + pageSize + "&sortOrder=@ViewBag.SortOrder";
+    }
+
+    function changePage(page, pageSize, sortOrder) {
+        if (sortOrder == '!asc') {
+            sortOrder = 'desc';
+        }
+        if (sortOrder == '!desc') {
+            sortOrder = 'asc';
+        }
+        window.location.href = "/Product/ProductsSold"
+            + "?page=" + page
+            + "&pageSize=" + pageSize
+            + "&sortOrder=" + sortOrder;
+    }
+</script>

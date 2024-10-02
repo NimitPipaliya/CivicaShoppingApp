@@ -1,0 +1,280 @@
+﻿@using CivicaShoppingAppClient.ViewModels
+@model List<ProductListViewModel>
+
+@{
+    string search = ViewBag.Ch;
+    bool isSearchActive = !string.IsNullOrEmpty(search);
+}
+
+<div class="container">
+
+    <div class="row mb-4 align-items-center ">
+        <!-- Heading -->
+        <div class="col-md-2">
+            <h1>Products</h1>
+        </div>
+        @* Reports *@
+        <div class="col-md-5 d-flex justify-content-end">
+            <div class="dropdown">
+                <button class="btn dropdown-toggle civicaBtn" type="button" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <b>Reports</b>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item dropdownBtn" asp-action="QuantityOfProducts" asp-controller="Product">Products Quantity</a>
+                    <a class="dropdown-item dropdownBtn "  asp-action="ProductsSold" asp-controller="Product">Products Sales</a>
+                </div>
+
+
+
+                @* Add button *@
+                <a class="btn civicaBtn" asp-action="Create" style="margin-left: 10px;">
+                    <i class="fas fa-plus-circle mr-1"></i> Add
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Search Bar -->
+        <div class="col-md-5">
+            <form method="get" asp-controller="Product">
+                <div class="d-flex">
+                    <input type="text" name="searchedProduct" value="@search" class="form-control" style="max-width: 300px; flex: 1;" id="searchedProduct" placeholder="Search products...">
+
+                    <!-- Search Button -->
+                    <button type="submit" class="btn civicaBtn">Search</button>
+                    @if (isSearchActive)
+                    {
+                        <div class="input-group-append">
+                            <a href="/Product/Index?pageSize=@ViewBag.PageSize" class="btn btn-outline-secondary">Clear</a>
+                        </div>
+                    }
+
+                </div>
+              
+            </form>
+        </div>
+    </div>
+
+    <table class="table table-striped text-center">
+        <thead>
+            <tr>
+                <th style="cursor: pointer" onclick="changePage('@ViewBag.Ch',1, '@ViewBag.PageSize', '!@ViewBag.Sort_dir')">
+                    Product Name
+                    @if (ViewBag.Sort_dir == "asc")
+                    {
+                        <i class="fas fa-sort-amount-up"></i>
+                    }
+                    else
+                    {
+                        <i class="fas fa-sort-amount-down"></i>
+                    }
+                </th>
+                <th>Product Description</th>
+                <th>Product Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>@product.ProductName</td>
+                    <td>@product.ProductDescription</td>
+                    <td>@product.ProductPrice</td>
+                    <td>
+                        <a asp-action="Details" asp-controller="Product" asp-route-id="@product.ProductId" class="btn civicaBtn"><i class="fas fa-info-circle"></i> Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+    @*     <div class="d-flex justify-content-between">
+    <div>
+    <label for="pageSize">Page Size:</label>
+    <select id="pageSize" class="form-control" onchange="changePageSize(this)">
+    <option value="2">2</option>
+    <option value="4">4</option>
+    <option value="6">6</option>
+    <!-- Add more options as needed -->
+    </select>
+    </div>
+    <div>
+    <ul class="pagination">
+    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+    {
+    <li class="page-item @(i == ViewBag.Page ? "active" : "")">
+    <a class="page-link" href="/Product/Index?searchedProduct=@ViewBag.Ch&page=@i&pageSize=@ViewBag.PageSize&sort_dir=@ViewBag.sort_dir">@i</a>
+    </li>
+    }
+    </ul>
+    </div>
+    </div>
+    </div> *@
+
+    <!-- Pagination controls -->
+    <div class="d-flex justify-content-between align-items-center">
+        <!-- Pagination controls -->
+        <ul class="pagination align-items-center">
+            <li class="page-item @(ViewBag.CurrentPage <= 1 ? "disabled" : "")">
+                <a class="page-link" onclick="changePage('@ViewBag.Ch',1, '@ViewBag.PageSize', '@ViewBag.Sort_dir')" aria-label="First">
+                    <span aria-hidden="true"><i class="fa-solid fa-angles-left"></i></span>
+                </a>
+            </li>
+            <li class="page-item @(ViewBag.CurrentPage <= 1 ? "disabled" : "")">
+                <a class="page-link" onclick="changePage('@ViewBag.Ch','@(ViewBag.CurrentPage - 1)', '@ViewBag.PageSize', '@ViewBag.Sort_dir')" aria-label="Previous">
+                    <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+                </a>
+            </li>
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                    <a class="page-link" onclick="changePage('@ViewBag.Ch','@i', '@ViewBag.PageSize', '@ViewBag.Sort_dir')">@i</a>
+                </li>
+            }
+
+
+            <li class="page-item @(ViewBag.CurrentPage >= ViewBag.TotalPages ? "disabled" : "")">
+                <a class="page-link" onclick="changePage('@ViewBag.Ch','@(ViewBag.CurrentPage + 1)', '@ViewBag.PageSize', '@ViewBag.Sort_dir')" aria-label="Next">
+                    <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+                </a>
+            </li>
+            <li class="page-item @(ViewBag.CurrentPage >= ViewBag.TotalPages ? "disabled" : "")">
+                <a class="page-link" onclick="changePage('@ViewBag.Ch',@ViewBag.TotalPages, '@ViewBag.PageSize', '@ViewBag.Sort_dir')" aria-label="Last">
+                    <span aria-hidden="true"><i class="fa-solid fa-angles-right"></i></span>
+                </a>
+            </li>
+        </ul>
+
+        <div>
+            <label class="m-2" for="pageSize"><i class="fas fa-list mr-1"></i> Page Size:</label>
+            <select id="pageSize" value="@ViewBag.PageSize" onchange="changePage('@ViewBag.Ch',1, this.value, '@ViewBag.Sort_dir')" class="form-control pcursor text-center">
+                <option value="2">2</option>
+                <option value="4">4</option>
+                <option value="6">6</option>
+                <option value="8">8</option>
+            </select>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var currentPageSize = @(ViewBag.PageSize); // Get current page size from ViewBag
+            var pageSizeDropdown = document.getElementById("pageSize");
+            // Set selected option based on current page size
+            for (var i = 0; i < pageSizeDropdown.options.length; i++) {
+                if (pageSizeDropdown.options[i].value === currentPageSize.toString()) {
+                    pageSizeDropdown.selectedIndex = i;
+                    break;
+                }
+            }
+        });
+
+        function changePageSize(select) {
+            var pageSize = select.value;
+            var currentPage = @(ViewBag.CurrentPage);
+            var sort_dir = "@ViewBag.sort_dir";
+            window.location.href = "/Product/Index?searchedProduct=@ViewBag.Ch" + "&page=" + 1 + "&pageSize=" + pageSize + "&sort_dir=" + sort_dir;
+        }
+
+        function changePage(searchedProduct = null, page, pageSize, sortDir) {
+            if (sortDir == '!asc') {
+                sortDir = 'desc';
+            }
+            if (sortDir == '!desc') {
+                sortDir = 'asc';
+            }
+
+            window.location.href = "/Product/Index" +
+                "?searchedProduct=@ViewBag.Ch" +
+                "&page=" + page +
+                "&pageSize=" + pageSize +
+                "&sort_dir=" + sortDir;
+        }
+    </script>
+
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px; /* Add margin top for spacing */
+            margin-bottom: 20px; /* Add margin bottom for spacing */
+        }
+
+            .pagination li {
+                list-style-type: none; /* Remove default list styling */
+            }
+
+            .pagination .page-link {
+                color: #7b57cb; /* Default link color */
+                background-color: transparent;
+                border: 1px solid #dee2e6; /* Add border */
+                cursor: pointer;
+                transition: color 0.3s, background-color 0.3s, border-color 0.3s; /* Smooth transition */
+                padding: 0.5rem 0.75rem; /* Padding for the link */
+                border-radius: 0.25rem; /* Rounded corners */
+            }
+
+                .pagination .page-link:hover {
+                    color: #7b57cb; /* Darker blue color on hover */
+                    text-decoration: none; /* Remove underline on hover */
+                    border-color: #adb5bd; /* Adjust border color on hover */
+                }
+
+            .pagination .page-item.disabled .page-link {
+                color: #a5a2a2; /* Faded text color for disabled buttons */
+                pointer-events: none; /* Disable pointer events for disabled buttons */
+                background-color: #e9ecef;
+            }
+
+            .pagination .page-item.active .page-link {
+                background-color: #7b57cb; /* Active page background color */
+                color: #fff; /* Active page text color */
+                border-color: #7b57cb; /* Active page border color */
+                cursor: pointer;
+            }
+
+        .page-size-selection {
+            display: flex;
+            align-items: center;
+            margin-top: 10px; /* Adjust margin top */
+        }
+
+            .page-size-selection select {
+                margin-left: 10px; /* Add some spacing between the label and the select */
+            }
+
+        .custom-select {
+            border: 1px solid #ced4da; /* Add border */
+            padding: 0.375rem 2rem 0.375rem 1rem; /* Add padding */
+            font-size: 1rem; /* Set font size */
+            border-radius: 0.25rem; /* Add border radius */
+            background-color: #fff; /* Set background color */
+            background-image: none; /* Remove background image */
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; /* Add transition */
+        }
+
+            .custom-select:focus {
+                border-color: #80bdff; /* Set border color on focus */
+                outline: 0; /* Remove outline */
+                box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Add box shadow on focus */
+            }
+
+        .table {
+            margin-top: 20px; /* Add margin top for spacing */
+        }
+
+        /* Pagination buttons */
+        .pagination ul li.disabled a {
+            background-color: #fff; /* Light background color */
+            color: #6c757d; /* Text color */
+        }
+
+            /* Font Awesome arrows */
+            .pagination ul li.disabled a i {
+                color: #6c757d; /* Adjust icon color */
+            }
+    </style>

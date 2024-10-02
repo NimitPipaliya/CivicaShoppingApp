@@ -1,0 +1,45 @@
+<div *ngIf="loading">
+  <img src="assets/loader.gif" alt="Loading...">
+  </div>
+<div class="container" *ngIf="!loading">
+    <!-- Cart items -->
+    <div class="row" *ngIf="cartItems!= null">
+      <div class="col-md-4 mb-4" *ngFor="let item of cartItems">
+        <div class="card shadow-sm">
+          <h2 class="card-header text-center">{{ item.product.productName }}</h2>
+          <div class="card-body">
+            <p class="card-text">
+              <i class="fas fa-hashtag"></i> Quantity:
+              <button class="btn addTocartBtn" (click)="decrementQuantity(item)"><i class="fa-solid fa-minus" style="font-size: 8px;"></i></button>
+              {{ item.productQuantity }}
+              <button class="btn addTocartBtn" (click)="incrementQuantity(item)"><i class="fa-solid fa-plus" style="font-size: 8px;"></i></button>
+            </p>
+            <p class="card-text"><i class="fas fa-info-circle"></i> Description: {{ item.product.productDescription }}</p>
+            <p class="card-text"><i class="fas fa-coins"></i> Price: {{ item.product.productPrice | currency : "INR" }}</p>
+            <button class="btn btn-outline-danger" (click)="deleteCartItem(item.productId)"><i class="fas fa-trash-alt"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row mt-4" *ngIf="cartItems == null">
+      <div class="col-md-8 offset-md-2 text-center">
+        <div class="card border-0">
+          <div class="card-body">
+            <h3 class="card-title text-secondary">Your Cart is Empty :(</h3>
+            <p class="card-text">Explore our products</p>
+            <a routerLink="/buyProducts" class="btn btn-lg"> <i class="fa-solid fa-cart-shopping"></i> Start shopping!!</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Checkout and total -->
+    <div class="row mt-4" *ngIf="cartItems!.length > 0">
+      <div class="col-md-6 mx-auto text-center">
+        <a routerLink="/buyProducts" class="btn civicaBtnRev mx-2"><i class="fas fa-shopping-cart"></i> Shop more!</a>
+        <a (click)="placeOrder()" routerLinkActive="router-link-active" class="btn Checkout-btn">Checkout</a>
+        <h4 class="mt-4">Total Checkout Amount: <span class="totalAmount">{{ totalCheckoutAmount | currency:'INR':'symbol' }}</span></h4>
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,20 @@
+/* .text-center {
+    text-align: center;
+  }
+   */
+  .text-center h1 {
+    font-size: 2rem; 
+    margin-bottom: 20px; 
+  }
+  /* Adjust font size as needed */
+  /* Adjust spacing as needed */
+  
+  .homeimg{
+    background-image: url('src/assets/civicabackground.png');
+    background-size: 1130px;
+    padding: 250px;
+    text-align: left;
+    margin: 0%;
+}
+  
+ 

@@ -1,0 +1,109 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.min.css";
+
+.civicaBtn{
+    color:white;
+    background-color: #7B57CB;
+}
+.civicaBtn:hover{
+    color: white;
+    background-color: #D62598;
+}
+
+.civicaBtn:disabled{
+    color: white;
+    background-color:#7B57CB;
+}
+.civicaBtnRev{
+    color:white;
+    background-color: #D62598;
+    
+}
+.civicaBtnRev:hover{
+    color: white;
+    background-color: #009CA6;
+}
+.civicaBtnHome{
+    color:white;
+    /* background-color: #D62598; */
+    background-color:#7B57CB;
+    
+}
+.civicaBtnHome:hover{
+    color: white;
+    background-color: #009CA6;
+}
+
+.purple-btn{
+    background-color: #7B57CB;
+    color: white;
+}
+
+.purple-btn:hover{
+    background-color: #D62598;
+    color: white;
+
+}
+
+.civicaBtn{
+    color:white;
+    background-color: #7B57CB;
+
+}
+.civicaBtn:hover{
+    color: white;
+    background-color: #D62598;
+}
+
+.civicaBtn:disabled{
+    color: white;
+    background-color:#7B57CB;
+}
+.civicaBtnRev{
+    color:white;
+    background-color: #D62598;
+    
+}
+.civicaBtnRev:hover{
+    color: white;
+    background-color: #009CA6;
+}
+.civicaBtnHome{
+    color:white;
+    /* background-color: #D62598; */
+    background-color:#7B57CB;
+    
+}
+.civicaBtnHome:hover{
+    color: white;
+    background-color: #009CA6;
+}
+.pcursor{
+    cursor: pointer;
+}
+.bgColor{
+    background-color: #009CA6;
+}
+
+.loader-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top */
+}
+
+/* Centering the loader image */
+.loader-image {
+    width: 50px;
+    height: 50px;
+}
+
+.hdrColor{
+    background-color: #9fe2e7;
+}

@@ -1,0 +1,279 @@
+﻿@using CivicaShoppingAppClient.ViewModels
+@model List<OrderListViewModel>
+<head>
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px; /* Add margin top for spacing */
+            margin-bottom: 20px; /* Add margin bottom for spacing */
+        }
+
+            .pagination li {
+                list-style-type: none; /* Remove default list styling */
+            }
+
+            .pagination .page-link {
+                color: #7b57cb; /* Default link color */
+                background-color: transparent;
+                border: 1px solid #dee2e6; /* Add border */
+                cursor: pointer;
+                transition: color 0.3s, background-color 0.3s, border-color 0.3s; /* Smooth transition */
+                padding: 0.5rem 0.75rem; /* Padding for the link */
+                border-radius: 0.25rem; /* Rounded corners */
+            }
+
+                .pagination .page-link:hover {
+                    color: #7b57cb; /* Darker blue color on hover */
+                    text-decoration: none; /* Remove underline on hover */
+                    border-color: #adb5bd; /* Adjust border color on hover */
+                }
+
+            .pagination .page-item.disabled .page-link {
+                color: #a5a2a2; /* Faded text color for disabled buttons */
+                pointer-events: none; /* Disable pointer events for disabled buttons */
+                background-color: #e9ecef;
+            }
+
+            .pagination .page-item.active .page-link {
+                background-color: #7b57cb; /* Active page background color */
+                color: #fff; /* Active page text color */
+                border-color: #7b57cb; /* Active page border color */
+                cursor: pointer;
+            }
+
+        .page-size-selection {
+            display: flex;
+            align-items: center;
+            margin-top: 10px; /* Adjust margin top */
+        }
+
+            .page-size-selection select {
+                margin-left: 10px; /* Add some spacing between the label and the select */
+            }
+
+        .custom-select {
+            border: 1px solid #ced4da; /* Add border */
+            padding: 0.375rem 2rem 0.375rem 1rem; /* Add padding */
+            font-size: 1rem; /* Set font size */
+            border-radius: 0.25rem; /* Add border radius */
+            background-color: #fff; /* Set background color */
+            background-image: none; /* Remove background image */
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; /* Add transition */
+        }
+
+            .custom-select:focus {
+                border-color: #80bdff; /* Set border color on focus */
+                outline: 0; /* Remove outline */
+                box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Add box shadow on focus */
+            }
+
+        .table {
+            margin-top: 20px; /* Add margin top for spacing */
+        }
+
+        /* Pagination buttons */
+        .pagination ul li.disabled a {
+            background-color: #fff; /* Light background color */
+            color: #6c757d; /* Text color */
+        }
+
+            /* Font Awesome arrows */
+            .pagination ul li.disabled a i {
+                color: #6c757d; /* Adjust icon color */
+            }
+    </style>
+</head>
+@if (Model == null || Model.Count == 0)
+{
+    <h3>Purchase history</h3>
+}
+else
+{
+    <h3 id="purchaseHistoryHeading" class="col-sm-10">Purchase history of <span id="namePlaceholder"></span>(<span id="usernamePlaceholder"></span>)</h3>
+}
+
+<div class="table-responsive">
+    <table class="table table-striped text-center pcursor">
+        <thead class="thead-dark">
+            <tr>
+                <th>Order Number</th>
+                <th style="cursor: pointer" onclick="changePage('@ViewBag.userid',1, '@ViewBag.PageSize', '!@ViewBag.sort_direction')">
+                    Order Date
+                    @if (ViewBag.sort_direction == "asc")
+                    {
+                        <i class="fas fa-sort-amount-up"></i>
+                    }
+                    else
+                    {
+                        <i class="fas fa-sort-amount-down"></i>
+                    }
+                </th>
+                 </tr>
+        </thead>
+        @if (Model == null || Model.Count == 0)
+        {
+            <tbody>
+            <td colspan="4" class="text-center">No records found</td>
+            </tbody>
+        }
+        else
+        {
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr data-href="@Url.Action("OrderSummary", "Order", new {id = order.OrderNumber})">
+                
+                        <td># @order.OrderNumber</td>
+                        <td>@order.OrderDate.ToString("MMMM dd-yyyy")</td>
+                    </tr>
+                }
+            </tbody>
+        }
+    </table>
+</div>
+
+<!-- Pagination controls -->
+<div class="d-flex justify-content-between align-items-center">
+    <!-- Pagination controls -->
+    <ul class="pagination align-items-center">
+        <li class="page-item @(ViewBag.CurrentPage <= 1 ? "disabled" : "")">
+            <a class="page-link" onclick="changePage('@ViewBag.userid',1, '@ViewBag.PageSize', '@ViewBag.sort_direction')" aria-label="First">
+                <span aria-hidden="true"><i class="fa-solid fa-angles-left"></i></span>
+            </a>
+        </li>
+        <li class="page-item @(ViewBag.CurrentPage <= 1 ? "disabled" : "")">
+            <a class="page-link" onclick="changePage('@ViewBag.userid','@(ViewBag.CurrentPage - 1)', '@ViewBag.PageSize', '@ViewBag.sort_direction')" aria-label="Previous">
+                <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+            </a>
+        </li>
+
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                <a class="page-link" onclick="changePage('@ViewBag.userid','@i', '@ViewBag.PageSize', '@ViewBag.sort_direction')">@i</a>
+            </li>
+        }
+
+
+        <li class="page-item @(ViewBag.CurrentPage >= ViewBag.TotalPages ? "disabled" : "")">
+            <a class="page-link" onclick="changePage('@ViewBag.userid','@(ViewBag.CurrentPage + 1)', '@ViewBag.PageSize', '@ViewBag.sort_direction')" aria-label="Next">
+                <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+            </a>
+        </li>
+        <li class="page-item @(ViewBag.CurrentPage >= ViewBag.TotalPages ? "disabled" : "")">
+            <a class="page-link" onclick="changePage('@ViewBag.userid',@ViewBag.TotalPages, '@ViewBag.PageSize', '@ViewBag.sort_direction')" aria-label="Last">
+                <span aria-hidden="true"><i class="fa-solid fa-angles-right"></i></span>
+            </a>
+        </li>
+    </ul>
+
+    <div>
+        <label class="m-2" for="pageSize"><i class="fas fa-list mr-1"></i> Page Size:</label>
+        <select id="pageSize" value="@ViewBag.PageSize" onchange="changePage('@ViewBag.userid',1, this.value, '@ViewBag.sort_direction')" class="form-control pcursor text-center">
+            <option value="2">2</option>
+            <option value="4">4</option>
+            <option value="6">6</option>
+            <option value="8">8</option>
+        </select>
+    </div>
+</div>
+
+@if(User.Identity.Name == "admin")
+{
+    <a asp-action="Index" asp-controller="Auth" class="btn btn-secondary btn-sm"><i class="fas fa-list mr-1"></i> Back</a>
+}
+else
+{
+    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary btn-sm"><i class="fas fa-list mr-1"></i> Back</a>
+}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        GetUserName();
+        var currentPageSize = @(ViewBag.PageSize);
+        var pageSizeDropdown = document.getElementById("pageSize");
+        for (var i = 0; i < pageSizeDropdown.options.length; i++) {
+            if (pageSizeDropdown.options[i].value === currentPageSize.toString()) {
+                pageSizeDropdown.selectedIndex = i;
+                break;
+            }
+        }
+
+        var rows = document.querySelectorAll('tr[data-href]');
+        rows.forEach(function (row) {
+            row.addEventListener('click', function () {
+                window.location.href = row.getAttribute('data-href');
+            });
+        });
+    });
+    function changePageSize(select) {
+        var pageSize = select.value;
+        var currentPage = 1;
+        var sort_direction = "@ViewBag.sort_direction";
+        var userid = "@ViewBag.userId"
+        window.location.href = "/Order/GetAllOrdersByUserId?userId="+ userid + "&page=" + currentPage + "&pageSize=" + pageSize + "&sort_direction=" + sort_direction;
+    };
+
+    function changePage(userid,currentPage, pageSize, sort_direction) {
+        if (sort_direction == '!asc') {
+            sort_direction = 'desc';
+        }
+        if (sort_direction == '!desc') {
+            sort_direction = 'asc';
+        }
+        window.location.href = "/Order/GetAllOrdersByUserId"+
+        "?userId=" + userid + 
+        "&page=" + currentPage + 
+        "&pageSize=" + pageSize + 
+        "&sort_direction=" + sort_direction;
+    }
+
+    function getCookie(name) {
+        const cookieValue = document.cookie
+            .split('; ')
+            .find(cookie => cookie.startsWith(name + '='))
+            ?.split('=')[1];
+        return cookieValue ? decodeURIComponent(cookieValue) : null;
+    }
+
+    function GetUserName() {
+        const jwtToken = getCookie('jwtToken');
+        if (!jwtToken) {
+            // Redirect to the login page if cookie not available
+            window.location.href = '/auth/login';
+            return; // Stop further execution
+        }
+        var userId = "@ViewBag.userid";
+        $.ajax({
+            url: "http://localhost:5007/api/Auth/GetUserById/" + userId,
+            type: "GET",
+            dataType: "json",
+            headers: {
+                'Authorization': 'Bearer ' + jwtToken
+            },
+            success: function (response) {
+                if (response.success) {
+                    var name = response.data.name;
+                    var loginId = response.data.loginId;
+                    var namePlaceholder = document.getElementById('namePlaceholder');
+                    var usernamePlaceholder = document.getElementById('usernamePlaceholder');
+                    namePlaceholder.textContent = name;
+                    usernamePlaceholder.textContent = loginId;
+                    // var purchaseHistoryHeading = document.getElementById('purchaseHistoryHeading');
+                    // purchaseHistoryHeading.textContent = "Purchase history of " + loginId;
+                } else {
+                    console.error("Error: Response not successful.");
+                }
+            },
+            error: function () {
+                console.error("Error fetching user information.");
+            }
+        });
+    }
+
+
+
+</script>
+

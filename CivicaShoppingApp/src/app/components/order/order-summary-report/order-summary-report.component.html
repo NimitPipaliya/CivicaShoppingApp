@@ -1,0 +1,43 @@
+<div *ngIf="loading">
+    <img src="assets/loader.gif" alt="Loading...">
+</div>
+<div class="container" *ngIf="!loading">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+
+            <div class="d-flex justify-content-between my-3">
+                <h3 class="flex-item-1">Order summary</h3>
+                <h4 class="flex-item-2">#{{ orderNumber }}</h4>
+            </div>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let orderItem of orderItems">
+                        <td>{{ orderItem.product.productName }}</td>
+                        <td>{{ orderItem.orderQuantity }}</td>
+                        <td>{{ orderItem.product.finalPrice * orderItem.orderQuantity | currency: "INR" }}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2" class="text-right"><strong>Total order amount:</strong></td>
+                        <td><strong>{{ orderItems[0].orderAmount | currency: "INR" }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="text-right"><strong>Order date:</strong></td>
+                        <td>{{ orderItems[0].orderDate | date }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+           
+        </div>
+    </div>
+</div>

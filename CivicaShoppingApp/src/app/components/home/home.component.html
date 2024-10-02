@@ -1,0 +1,15 @@
+<div class="m-0 p-0">
+  <div *ngIf="isAuthenticated" class="text-center homeimg">
+    <h1><i class="fas fa-shopping-cart"></i> Welcome To Civica Shopping App<span>, {{ username | uppercase }}</span>
+    </h1>
+  </div>
+
+  <div *ngIf="!isAuthenticated" class="text-center homeimg">
+    <div style="float: left;">
+      <h1><i class="fas fa-shopping-cart"></i> Welcome To Civica Shopping App</h1>
+      <h6>Don't have an account? <a [routerLink]="['/signup']" routerLinkActive="router-link-active">Signup</a></h6>
+      <h6>Already have an account? Click here to <a [routerLink]="['/signin']"
+          routerLinkActive="router-link-active">Login</a>.</h6>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,116 @@
+    html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+/*Generle Button*/
+
+
+    /*DropDown button*/
+    .dropdownBtn:hover{
+        background-color:#D62598;
+        color:white;
+
+    }
+
+.message-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4CAF50;
+    color: #FFF;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 9999;
+}
+.pcursor {
+    cursor: pointer;
+}
+
+.bgColor {
+    background-color: #009CA6;
+}
+.civicaBtn{
+    color: white;
+    background-color: #7B57CB;
+}
+.civicaBtn:hover {
+    color: white;
+    background-color: #D62598;
+}
+.civicaBtn:disabled{
+    color: white;
+    background-color: #7B57CB;
+}
+
+.civicaBtnRev {
+    color: white;
+    background-color: #D62598;
+}
+    .civicaBtnRev:hover {
+        color: white;
+        background-color: #009CA6;
+    }
+    .civicaBtnRev:disabled {
+        color: white;
+        background-color: #D62598;
+    }
+
+.civicaBtn2{
+    color: white;
+}
+
+.civicaBtn2:hover {
+    color: white;
+    background-color: #D62598;
+}
+
+.textWhite{
+    color:white;
+}
+.dcursor{
+    cursor:default;
+}
+
+.textTeal {
+    color: #009CA6;
+}
+
+.hoverPink:hover {
+    background-color: #D62598;
+}
+
+.civicaLink:hover {
+    background-color: #D62598;
+    color: white;
+}
+.bgImage {
+    background-image: url('../images/civicabackground.png');
+    background-size: 1121px;
+    padding: 256px 800px 246px 0px;
+    text-align: left;
+    margin-top: -1.5%;
+    margin-right: -3%;
+    margin-bottom: -8%;
+    margin-left: -3%;
+    height: 87vh;
+    float: right;
+    width: 100%;
+}

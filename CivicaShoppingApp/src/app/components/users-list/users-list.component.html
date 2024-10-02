@@ -1,0 +1,121 @@
+<div class="container">
+  <div class="row mb-4">
+    <!-- Heading on the left corner -->
+    <div class="col-md-6">
+      <h1>Users</h1>
+    </div>
+      <div *ngIf="loading">
+  <img src="assets/loader.gif" alt="Loading...">
+  </div>
+
+    <!-- Search bar on the right corner -->
+    <div class="col-md-6 d-flex align-items-end justify-content-end">
+      <div class="col-md-8">
+        <input type="text" [(ngModel)]="searchQuery" class="form-control" (input)="searchUsers()"
+          placeholder="Search users..." />
+      </div>
+      <div class="col-md-2">
+        <button type="button" class="btn btn-outline-secondary  w-70" (click)="clearSearch()">Clear</button>
+      </div>
+    </div>
+
+    <!-- Validation message -->
+    <div *ngIf="searchQuery && searchQuery.length <= 2" class="col-md-6 offset-md-6 text-warning">
+      Search query must be at least 2 characters
+    </div>
+  </div>
+</div>
+
+<table class="table table-striped text-center" *ngIf="!loading">
+  <thead>
+    <tr>
+      <th style="cursor: pointer;" (click)="onClickSort()">
+        Name
+        <i *ngIf="sortOrder == 'asc'" class="fas fa-sort-amount-up"></i>
+        <i *ngIf="sortOrder == 'desc'" class="fas fa-sort-amount-down"></i>
+      </th>
+        <th>Birth Date</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th *ngIf="isAuthenticated">Action</th>
+      </tr>
+    </thead>
+
+  <tbody *ngIf="users && users.length > 0 && totalUsers != 0; else noContacts">
+
+    <tr *ngFor="let user of users">
+      <ng-container *ngIf="user.loginId != 'admin'">
+        <td>{{ user.salutation }} {{ user.name }}</td>
+        <td>{{user.birthDate | date}}</td>
+        <td>{{user.age}}</td>
+        <td *ngIf="user.gender == 'M'">Male</td>
+        <td *ngIf="user.gender == 'F'">Female</td>
+        <td>{{user.email}}</td>
+        <td>{{user.phone}}</td>
+<td> 
+  <button *ngIf="isAuthenticated" class="btn m-1 purple-btn" [routerLink]="['/userOrderReport/',user.userId]" routerLinkActive="router-link-active" >
+  Orders</button> |
+    <button *ngIf="isAuthenticated" class="btn btn-outline-danger m-1" (click)="deleteUser(user.userId)">
+  <i class="fas fa-trash-alt"></i></button>
+    
+  
+</td>
+</ng-container>
+      </tr>
+    </tbody>
+
+  <ng-template #noContacts>
+    <tr *ngIf="!loading">
+      <td colspan="7" class="text-center justify-content-center">No users found</td>
+    </tr>
+  </ng-template>
+</table>
+
+<div *ngIf="totalUsers !== 0 && !loading" class="d-flex justify-content-between align-items-center pagination-container">
+  <!-- Pagination controls -->
+  <ul class="pagination align-items-center">
+    <li class="page-item" [class.disabled]="currentPage === 1">
+      <button class="btn btn-outline-primary page-link" (click)="onPageChange(1)" [disabled]="currentPage === 1">
+        <i class="fa-solid fa-angles-left"></i>
+      </button>
+    </li>
+    <li class="page-item" [class.disabled]="currentPage === 1">
+      <button class="btn btn-outline-primary page-link" (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+    </li>
+
+    <li *ngFor="let pageNumber of totalPages" class="page-item" [class.active]="currentPage === pageNumber">
+      <button class="btn btn-outline-primary page-link" (click)="onPageChange(pageNumber)">
+        {{ pageNumber }}
+      </button>
+    </li>
+
+    <li class="page-item" [class.disabled]="currentPage * pageSize >= totalUsers">
+      <button class="btn btn-outline-primary page-link" (click)="onPageChange(currentPage + 1)" [disabled]="currentPage * pageSize >= totalUsers">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </li>
+    <li class="page-item" [class.disabled]="currentPage === totalPages[totalPages.length - 1]">
+      <button class="btn btn-outline-primary page-link" (click)="onPageChange(totalPages[totalPages.length - 1])" [disabled]="currentPage === totalPages[totalPages.length - 1]">
+        <i class="fa-solid fa-angles-right"></i>
+      </button>
+    </li>
+  </ul>
+
+  <!-- Page Size Selection -->
+  <div class="ml-auto">
+    <label class="m-2" for="pageSize"><i class="fas fa-list mr-1"></i> Page Size:</label>
+    <select id="pageSize" [(ngModel)]="pageSize" (change)="onPageSizeChange()" class="form-control form-control-md custom-select text-center">
+      <option value="2">2</option>
+      <option value="4">4</option>
+      <option value="6">6</option>
+      <option value="8">8</option>
+      <option value="10">10</option>
+    </select>
+  </div>
+</div>
+<a class="btn btn-secondary btn-sm" [routerLink]="['/products']" routerLinkActive="router-link-active"><i class="fas fa-list mr-1"></i> Back</a>
+

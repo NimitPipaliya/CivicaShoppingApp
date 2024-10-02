@@ -1,0 +1,30 @@
+.Checkout-btn{
+    background-color: #7B57CB;
+    color: white;
+}
+
+.Checkout-btn:hover{
+    background-color: #D62598;
+    color: white;
+}
+
+.card-header{
+    color: white;
+    background-color: #009CA6; 
+}
+.addTocartBtn{
+    font-size: 5px;
+    
+}
+.addTocartBtn:hover{
+    color: white;
+    background-color: #D62598;
+}
+
+.addedText{
+    color: #D62598;
+}
+
+.totalAmount{
+    color:#009CA6;
+}

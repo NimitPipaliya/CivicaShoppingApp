@@ -1,0 +1,66 @@
+﻿@using CivicaShoppingAppClient.ViewModels
+@model LoginViewModel
+
+<div id="loader" style="display:none;">
+    <img src="~/images/loader.gif" alt="Loading...">
+</div>
+<div class="container m-0">
+    <div class="card border-0 shadow-sm mt-0">
+        <div class="card-header text-white py-3">
+            <h3 class="text-center mb-0"><i class="fas fa-sign-in-alt"></i> Sign In</h3>
+        </div>
+        <div class="card-body py-4 bg-light">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <form asp-action="LoginUser" method="post">
+                        <div class="form-group mb-3">
+                            <label asp-for="Username" class="control-lable m-1"><i class="fas fa-user"></i> Username</label>
+                            <input asp-for="Username" class="form-control" />
+                            <span asp-validation-for="Username" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Password" class="control-lable m-1"><i class="fas fa-lock"></i> Password</label>
+                            <input asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" style="float:right; text-decoration:none;">
+                            <a asp-action="ForgetPassword" asp-controller="Auth" style="text-decoration:none;">Forget Password?</a>
+                        </div>
+                        <br />
+                        <div class="form-group text-center mt-1">
+                            <button type="submit" value="Submit" class="btn loginBtn" style="width: 100px;"><i class="fas fa-sign-in-alt"></i> Login</button>
+                            <a asp-action="Index" class="btn btn-secondary" asp-controller="Home"><i class="fas fa-times"></i> Cancel</a>
+                            @* <a type="submit" value="Submit" class="btn loginBtn"><i class="fas fa-save"></i> Login</a> *@
+                            @* <button type="button" class="btn btn-secondary w-100"><i class="fas fa-times"></i> Cancel</button> *@
+                        </div>
+                        <p class="text-center mt-2">Don't have an account? @Html.ActionLink("Signup", "Index", "Home")</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .loginBtn {
+        color: white;
+        background-color: #7B57CB;
+    }
+
+        .loginBtn:hover {
+            color: white;
+            background-color: #D62598;
+        }
+
+    .card {
+        max-width: 400px; /* Limit the width of the card */
+        margin: 0 auto; /* Center the card horizontally */
+    }
+
+    .card-header {
+        background-color: #009CA6; /* Header background color */
+    }
+
+    .loginBtn {
+        width: 80%; /* Make login button full width */
+    }
+</style>

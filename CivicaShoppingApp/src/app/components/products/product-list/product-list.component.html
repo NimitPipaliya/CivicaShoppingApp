@@ -1,0 +1,111 @@
+<div class="container">
+  <div class="row mb-4 align-items-center">
+    <!-- Heading -->
+    <div class="col-md-2">
+      <h1>Products</h1>
+    </div>
+          <div *ngIf="loading">
+<img src="assets/loader.gif" alt="Loading...">
+</div>
+    <div class="col-md-5 d-flex justify-content-end">
+      <div ngbDropdown class="dropdown">
+        <button class="btn dropdown-toggle civicaBtn" id="navbarDropdown" ngbDropdownToggle>
+          <b>Reports</b>
+        </button>
+        <div ngbDropdownMenu aria-labelledby="navbarDropdown" class="dropdown-menu">
+          <a class="dropdown-item" routerLink="/getquantityofproducts">Products Quantity</a>
+          <a class="dropdown-item" routerLink="/productSales">Products Sales</a>
+          <!-- Add more dropdown items here as needed -->
+        </div>
+      </div>
+      <button class="btn civicaBtn " [routerLink]="['/products/add-product']" routerLinkActive style="margin-left: 10px;">
+        <i class="fas fa-plus-circle mr-1"></i> Add
+      </button>
+    </div>
+    <!-- Search Bar -->
+    <div class="col-md-5 d-flex">
+      <input type="text" class="form-control search-input mr-2" style="max-width: 400px; flex: 1;" id="searchbox"
+             name="searchbox" placeholder="Search products..." [(ngModel)]="searchCharachter" (keyup)="showAscSearch(searchCharachter, 1)">
+      
+      <!-- Clear Button -->
+      <button type="button" class="btn btn-outline-secondary" (click)="clearSearch()">Clear</button>
+    </div>
+  </div>
+
+
+  <table class="table table-striped text-center" *ngIf="!loading">
+    <thead>
+    <tr>
+      <th colspan="4" style="cursor: pointer;" (click)="onClickSort()">
+        Product Name
+        <i *ngIf="flag == 'asc'" class="fas fa-sort-amount-up"></i>
+        <i *ngIf="flag == 'desc'" class="fas fa-sort-amount-down"></i>
+      </th>
+      <th colspan="4">Product Description</th>
+      <th colspan="4">Product Price</th>
+      <th colspan="4">Action</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr *ngIf="!loading && !isExist">
+      <td colspan="20">No Products Found!</td>
+    </tr>
+    <tr *ngFor="let item of products">
+      <td colspan="4">{{item.productName}}</td>
+      <td colspan="4">{{item.productDescription}}</td>
+      <td colspan="4">{{item.productPrice | currency : ("INR")}}</td>
+      <td colspan="4">
+        <a [routerLink]="['/products/product-detail/', item.productId]" routerLinkActive="router-link-active"
+           class="btn civicaBtn" style="text-decoration: none;">
+          <i class="fas fa-info-circle mr-1"></i> Details
+        </a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  
+  <div class="d-flex justify-content-between align-items-center pagination-container" *ngIf="!loading">
+    <!-- Pagination controls -->
+    <ul class="pagination align-items-center">
+      <li class="page-item" [class.disabled]="pageNumber <= 1">
+        <a class="page-link" (click)="goToFirstPage()" aria-label="First">
+          <span aria-hidden="true"><i class="fa-solid fa-angles-left"></i></span>
+        </a>
+      </li>
+      <li class="page-item" [class.disabled]="pageNumber <= 1">
+        <a class="page-link" (click)="changePage(pageNumber - 1)" aria-label="Previous">
+          <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+        </a>
+      </li>
+
+      <li *ngFor="let i of [].constructor(totalPages); let index = index" class="page-item"
+          [class.active]="pageNumber === index + 1">
+        <a class="page-link" (click)="changePage(index + 1)">{{ index + 1 }}</a>
+      </li>
+
+      <li class="page-item" [class.disabled]="pageNumber >= totalPages">
+        <a class="page-link" (click)="changePage(pageNumber + 1)" aria-label="Next">
+          <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+        </a>
+      </li>
+      <li class="page-item" [class.disabled]="pageNumber >= totalPages">
+        <a class="page-link" (click)="goToLastPage()" aria-label="Last">
+          <span aria-hidden="true"><i class="fa-solid fa-angles-right"></i></span>
+        </a>
+      </li>
+    </ul>
+
+    <div>
+      <label class="m-2" for="pageSize"><i class="fas fa-list mr-1"></i> Page Size:</label>
+      <select id="pageSize" [(ngModel)]="pageSize" (change)="changePageSize(pageSize)" class="form-control form-control-md custom-select text-center">
+        <option [ngValue]="2">2</option>
+        <option [ngValue]="4">4</option>
+        <option [ngValue]="6">6</option>
+        <option [ngValue]="10">10</option>
+      </select>
+    </div>
+  </div>
+</div>
+

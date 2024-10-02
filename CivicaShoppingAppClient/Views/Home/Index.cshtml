@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center bgImage">
+    <div class="container-fluid">
+        <h1 class=""style="margin-top: -56px;margin-right:-450px;">
+            Welcome<br > To Civica Shopping App <br><i> @if(User.Identity.IsAuthenticated) { @User.Identity.Name.ToUpper() }</i></h1>
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <h6 style="margin-top:1rem; margin-right: -450px">
+                Don't have an account? <a asp-action="RegisterUser" asp-controller="Auth">Signup</a>
+            </h6>
+            <h6 style="margin-bottom: 1.5rem;margin-right: -450px">
+                Already have an account? Click here to <a asp-action="LoginUser" asp-controller="Auth">Login</a>
+            </h6>
+        }
+    </div>
+</div>

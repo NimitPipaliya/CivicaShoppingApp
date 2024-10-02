@@ -1,0 +1,44 @@
+﻿@if (!User.Identity.IsAuthenticated)
+{
+    <ul class="nav navbar-nav ml-auto">
+        <li class="nav-item civicaBtn2">
+            <a class="nav-link text-white" asp-action="RegisterUser" asp-controller="Auth"><span class="fas fa-user"></span> Sign Up </a>
+        </li>
+        <li class="nav-item civicaBtn2">
+            <a class="nav-link text-white" asp-action="LoginUser" asp-controller="Auth"><span class="fas fa-sign-in-alt"></span> Sign In</a>
+        </li>
+    </ul>
+}
+else
+{
+    <ul class="nav navbar-nav ml-auto text-white">
+        @{
+            if (User.Identity.Name != "admin")
+            {
+                <li class="nav-item dropdown">
+                    @{
+                        var userId = Convert.ToInt32(Context.Request.Cookies["UserId"]);
+                    }
+                    <a class="nav-link dropdown-toggle civicaBtn2 text-white"  href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="fas fa-user text-white"></span> @User.Identity.Name.ToUpper()
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item civicaLink" asp-controller="Auth" asp-action="ChangePassword"><span class="fas fa-key"></span> Change Password</a>
+                        <a class="dropdown-item civicaLink" asp-controller="Order" asp-action="GetAllOrdersByUserId" asp-route-userId="@userId"><i class="fa-solid fa-clock-rotate-left"></i> Order History</a>
+                    </div>
+                    <div class="dropdown-menu civicaBtn" aria-labelledby="navbarDropdownMenuLink">
+                    </div>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item cursor-default">
+                    <span class="nav-link text-white"><span class="fas fa-user"></span> @User.Identity.Name</span>
+                </li>
+            }
+        }
+        <li class="nav-item">
+            <a class="nav-link civicaBtn2 text-white" asp-action="LogoutUser" asp-controller="Auth"><span class="fas fa-sign-in-alt"></span> Sign Out</a>
+        </li>
+    </ul>
+}

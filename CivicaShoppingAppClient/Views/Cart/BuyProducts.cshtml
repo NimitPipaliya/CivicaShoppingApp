@@ -1,0 +1,323 @@
+﻿@using CivicaShoppingAppClient.ViewModels
+@model List<BuyProductViewModel>
+
+<div class="row">
+    <div class="col-md-12 text-right mb-3" style="text-align: end; font-weight: 600">
+        <span style="cursor: pointer" onclick="changePage(1, '@ViewBag.PageSize', '!@ViewBag.SortDir')">Sort
+            @if(ViewBag.SortDir == "asc")
+            {
+                <i class="fas fa-sort-amount-up"></i>
+            }
+            else
+            {
+                <i class="fas fa-sort-amount-down"></i>
+            }
+        </span>
+    </div>
+    @foreach (var product in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <h3 class="card-header text-center">@product.ProductName</h3>
+                <div class="card-body d-flex flex-column">
+                    <div>@{
+                            var amount = product.Quantity + product.finalPrice;
+                        }
+                        @if (product.Quantity <= 0)
+                        {
+                            <p class="card-text text-danger"> <i class="fas fa-hashtag"></i> Out of stock!</p>
+                        }
+                        else
+                        {
+                            <p class="card-text text-success" *ngIf="item.quantity>0"> <i class="fas fa-hashtag"></i> Available</p>
+                        }
+                        <p class="card-text"><i class="fas fa-info-circle"></i> Description: @product.ProductDescription</p>
+                        <p class="card-text"><i class="fas fa-coins"></i> Price: @product.ProductPrice</p>
+                    </div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="text-center mt-auto">
+                            @if (!product.isAddedToCart)
+                            {
+                                <button class="btn mb-1 addTocartBtn @(product.Quantity <= 0 ? "disabled" : "")"
+                                        onclick="addToCart('@product.ProductId', '@User.FindFirst("UserId")?.Value')">
+                                    Add to Cart
+                                </button>
+                            }
+                            else
+                            {
+                                <p class="text m-3 addedText" *ngIf="item.isAddedToCart && isAuthenticated">Product added to cart!</p>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+<!-- Pagination controls -->
+<div class="d-flex justify-content-between align-items-center">
+    <!-- Pagination controls -->
+    <ul class="pagination align-items-center">
+        <li class="page-item @(ViewBag.Page <= 1 ? "disabled" : "")">
+            <a class="page-link" onclick="changePage(1, '@ViewBag.PageSize', '@ViewBag.SortDir')" aria-label="First">
+                <span aria-hidden="true"><i class="fa-solid fa-angles-left"></i></span>
+            </a>
+        </li>
+        <li class="page-item @(ViewBag.Page <= 1 ? "disabled" : "")">
+            <a class="page-link" onclick="changePage('@(ViewBag.Page - 1)', '@ViewBag.PageSize', '@ViewBag.SortDir')" aria-label="Previous">
+                <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+            </a>
+        </li>
+
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(ViewBag.Page == i ? "active" : "")">
+                <a class="page-link" onclick="changePage('@i', '@ViewBag.PageSize', '@ViewBag.SortDir')">@i</a>
+            </li>
+        }
+
+
+        <li class="page-item @(ViewBag.Page >= ViewBag.TotalPages ? "disabled" : "")">
+            <a class="page-link" onclick="changePage('@(ViewBag.Page + 1)', '@ViewBag.PageSize', '@ViewBag.SortDir')" aria-label="Next">
+                <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+            </a>
+        </li>
+        <li class="page-item @(ViewBag.Page >= ViewBag.TotalPages ? "disabled" : "")">
+            <a class="page-link" onclick="changePage(@ViewBag.TotalPages, '@ViewBag.PageSize', '@ViewBag.SortDir')" aria-label="Last">
+                <span aria-hidden="true"><i class="fa-solid fa-angles-right"></i></span>
+            </a>
+        </li>
+    </ul>
+
+    <div>
+        <label class="m-2" for="pageSize"><i class="fas fa-list mr-1"></i> Page Size:</label>
+        <select id="pageSize" value="@ViewBag.PageSize" onchange="changePage(1, this.value, '@ViewBag.SortDir')" class="form-control pcursor text-center">
+            <option value="3">3</option>
+            <option value="6">6</option>
+            <option value="9">9</option>
+            <option value="12">12</option>
+        </select>
+    </div>
+</div>
+
+<style>
+    .card-header {
+        color: white;
+        background-color: #009CA6;
+    }
+
+    .addTocartBtn {
+        margin-top: 10px;
+        background-color: #7B57CB;
+        color: white;
+    }
+
+        .addTocartBtn:hover {
+            color: white;
+            background-color: #D62598;
+        }
+
+    .addedText {
+        color: #D62598;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px; /* Add margin top for spacing */
+        margin-bottom: 20px; /* Add margin bottom for spacing */
+    }
+
+        .pagination li {
+            list-style-type: none; /* Remove default list styling */
+        }
+
+        .pagination .page-link {
+            color: #7b57cb; /* Default link color */
+            background-color: transparent;
+            border: 1px solid #dee2e6; /* Add border */
+            cursor: pointer;
+            transition: color 0.3s, background-color 0.3s, border-color 0.3s; /* Smooth transition */
+            padding: 0.5rem 0.75rem; /* Padding for the link */
+            border-radius: 0.25rem; /* Rounded corners */
+        }
+
+            .pagination .page-link:hover {
+                color: #7b57cb; /* Darker blue color on hover */
+                text-decoration: none; /* Remove underline on hover */
+                border-color: #adb5bd; /* Adjust border color on hover */
+            }
+
+        .pagination .page-item.disabled .page-link {
+            color: #a5a2a2; /* Faded text color for disabled buttons */
+            pointer-events: none; /* Disable pointer events for disabled buttons */
+            background-color: #e9ecef;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #7b57cb; /* Active page background color */
+            color: #fff; /* Active page text color */
+            border-color: #7b57cb; /* Active page border color */
+            cursor: pointer;
+        }
+
+    .page-size-selection {
+        display: flex;
+        align-items: center;
+        margin-top: 10px; /* Adjust margin top */
+    }
+
+        .page-size-selection select {
+            margin-left: 10px; /* Add some spacing between the label and the select */
+        }
+
+    .custom-select {
+        border: 1px solid #ced4da; /* Add border */
+        padding: 0.375rem 2rem 0.375rem 1rem; /* Add padding */
+        font-size: 1rem; /* Set font size */
+        border-radius: 0.25rem; /* Add border radius */
+        background-color: #fff; /* Set background color */
+        background-image: none; /* Remove background image */
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; /* Add transition */
+    }
+
+        .custom-select:focus {
+            border-color: #80bdff; /* Set border color on focus */
+            outline: 0; /* Remove outline */
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Add box shadow on focus */
+        }
+
+    .table {
+        margin-top: 20px; /* Add margin top for spacing */
+    }
+
+    /* Pagination buttons */
+    .pagination ul li.disabled a {
+        background-color: #fff; /* Light background color */
+        color: #6c757d; /* Text color */
+    }
+
+        /* Font Awesome arrows */
+        .pagination ul li.disabled a i {
+            color: #6c757d; /* Adjust icon color */
+        }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var currentPageSize = @(ViewBag.PageSize); // Get current page size from ViewBag
+        var pageSizeDropdown = document.getElementById("pageSize");
+        // Set selected option based on current page size
+        for (var i = 0; i < pageSizeDropdown.options.length; i++) {
+            if (pageSizeDropdown.options[i].value === currentPageSize.toString()) {
+                pageSizeDropdown.selectedIndex = i;
+                break;
+            }
+        }
+    });
+
+    function changePage(page, pageSize, sortDir) {
+        if (sortDir == '!asc') {
+            sortDir = 'desc';
+        }
+        if (sortDir == '!desc') {
+            sortDir = 'asc';
+        }
+
+        window.location.href = "/Cart/BuyProducts" +
+            "?page=" + page +
+            "&pageSize=" + pageSize +
+            "&sortDir=" + sortDir;
+    }
+
+    function getCookie(name) {
+        const cookieValue = document.cookie
+            .split('; ')
+            .find(cookie => cookie.startsWith(name + '='))
+            ?.split('=')[1];
+        return cookieValue ? decodeURIComponent(cookieValue) : null;
+    }
+
+    function addToCart(productId, userId) {
+        const jwtToken = getCookie('jwtToken');
+        if (!jwtToken) {
+            window.location.href = '/auth/login';
+            return;
+        }
+
+        var requestData = {
+            userId: userId,
+            productId: productId,
+            productQuantity: 1
+        }
+
+        $.ajax({
+            url: "http://localhost:5007/api/Cart/AddToCart",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(requestData),
+            headers: {
+                'Authorization': 'Bearer ' + jwtToken
+            },
+            success: function (response) {
+                window.location.href = '/Cart/BuyProducts'
+                    + '?page=' + @ViewBag.Page
+                    + '&pageSize=' + @ViewBag.PageSize
+                    + '&sort_dir=' + '@ViewBag.SortDir';
+            },
+            error: function (xhr, status, error) {
+                // Check if there is a responseText available
+                if (xhr.responseText) {
+                    try {
+                        // Parse the responseText into a JavaScript object
+                        var errorResponse = JSON.parse(xhr.responseText);
+
+                        // Check the properties of the errorResponse object
+                        if (errorResponse && errorResponse.message) {
+                            // Display the error message to the user
+                            alert('Error: ' + errorResponse.message);
+                        } else {
+                            // Display a generic error message
+                            alert('An error occurred. Please try again. ');
+                        }
+
+                    } catch (parseError) {
+                        console.error('Error parsing response:', parseError);
+                        alert('An error occurred. Please try again. ');
+                    }
+                } else {
+                    // Display a generic error message if no responseText is available
+                    alert('An unexpected error occurred. Please try again. ');
+                }
+            },
+
+            complete: function () {
+                // $('#loader').hide();
+            }
+        })
+    }
+
+    function ShowMessage(message) {
+        // Get the message container
+        var messageContainer = document.getElementById('messageContainer');
+
+        // Display success message
+        messageContainer.textContent = message;
+        messageContainer.style.backgroundColor = '#4CAF50';
+        messageContainer.style.opacity = '1';
+
+        // Hide the message after 3 seconds (3000 milliseconds)
+        setTimeout(function () {
+            messageContainer.style.opacity = '0';
+        }, 1000);
+
+        // Redirect to index page after a short delay (optional)
+        setTimeout(function () {
+            // window.location.href = "/Buy/Index";
+        }, 2500); // Redirect after 3.5 seconds (3500 milliseconds)
+    }
+</script>

@@ -1,0 +1,76 @@
+<div *ngIf="loading">
+    <img src="assets/loader.gif" alt="Loading...">
+    </div>
+<div class="container" *ngIf="!loading">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="card-title"><i class="fas fa-edit"></i> Update Product</h5>
+                </div>
+                <div class="card-body">
+                    <div *ngIf="loading" class="loader-overlay">
+                        <img src="assets/loaderImage.gif" class="loader-overlay" alt="loading" />
+                    </div>
+                    <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+
+                        <input type="hidden" formControlName="productId">
+
+                        <div class="mb-3">
+                            <label for="productName" class="form-label"><i class="fas fa-cube"></i> Product Name:</label>
+                            <input type="text" class="form-control" id="productName" formControlName="productName" required>
+                            <div *ngIf="formControls['productName'].invalid && formControls['productName'].touched">
+                                <small class="text-danger" *ngIf="formControls['productName'].errors?.['required']">
+                                    Product name is required
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="productDescription" class="form-label"><i class="fas fa-info-circle"></i> Product Description:</label>
+                            <input type="text" class="form-control" id="productDescription" formControlName="productDescription" required>
+                            <div *ngIf="formControls['productDescription'].invalid && formControls['productDescription'].touched">
+                                <small class="text-danger" *ngIf="formControls['productDescription'].errors?.['required']">
+                                    Product description is required
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label"><i class="fas fa-sort-numeric-up"></i> Quantity:</label>
+                            <input min="0" type="number" class="form-control" id="quantity" formControlName="quantity" required>
+                            <div *ngIf="formControls['quantity'].invalid && formControls['quantity'].touched">
+                                <small class="text-danger" *ngIf="formControls['quantity'].errors?.['required']">
+                                    Quantity is required
+                                </small>
+                                <small class="text-danger" *ngIf="formControls['quantity'].errors?.['min']">
+                                    Minimum value cannot be less then 0.
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="productPrice" class="form-label"><i class="fa-solid fa-indian-rupee-sign"></i> Product Price:</label>
+                            <input min="0" type="number" class="form-control" id="productPrice" formControlName="productPrice" required>
+                            <div *ngIf="formControls['productPrice'].invalid && formControls['productPrice'].touched">
+                                <small class="text-danger" *ngIf="formControls['productPrice'].errors?.['required']">
+                                    Product price is required
+                                </small>
+                                <small class="text-danger" *ngIf="formControls['productPrice'].errors?.['min']">
+                                    Minimum value cannot be less then 0.
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" [disabled]="!productForm.valid" class="btn civicaBtn"><i class="fas fa-save"></i> Update</button>
+                        <a class="btn btn-secondary ml-2 mx-2" [routerLink]="['/products']"><i class="fas fa-list"></i> Back to List</a>
+                    
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Font Awesome -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>

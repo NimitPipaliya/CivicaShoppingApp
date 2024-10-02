@@ -1,0 +1,44 @@
+
+<div *ngIf="loading">
+  <img src="assets/loader.gif" alt="Loading...">
+  </div>
+<div class="container m-0" *ngIf="!loading">
+  <div class="card border-0 shadow-sm mt-0">
+    <div class="card-header text-white py-3">
+      <h3 class="text-center mb-0"><i class="fas fa-sign-in-alt"></i> Sign In</h3>
+    </div>
+    <div class="card-body py-4 bg-light">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <form (ngSubmit)="login()" #loginForm="ngForm" class="needs-validation" novalidate>
+            <div class="mb-3">
+              <label for="username" class="form-label"><i class="fas fa-user"></i> Username</label>
+              <input type="text" id="username" name="username" class="form-control" [(ngModel)]="username" required
+                #usernameInput="ngModel">
+              <div *ngIf="usernameInput.touched && usernameInput.invalid" class="text-danger">
+                <small *ngIf="usernameInput.errors?.['required']">Username is required.</small>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label"><i class="fas fa-lock"></i> Password</label>
+              <input type="password" id="password" name="password" class="form-control" [(ngModel)]="password" required
+                #passwordInput="ngModel">
+              <div *ngIf="passwordInput.touched && passwordInput.invalid" class="text-danger">
+                <small *ngIf="passwordInput.errors?.['required']">Password is required.</small>
+              </div>
+              <a [routerLink]="['/forgetpassword']" routerLinkActive="router-link-active" class="float-end text-decoration-none m-1">Forgot Password?</a>
+            </div>
+
+            <div class="mb-3">
+              <button type="submit" class="btn w-100 loginBtn" [disabled]="!loginForm.valid"><i class="fas fa-sign-in-alt"></i> Login</button>
+            </div>
+            <div>
+              <button type="button" class="btn btn-secondary w-100" [routerLink]="['/home']"><i class="fas fa-times"></i> Cancel</button>
+            </div>
+            <p class="text-center mt-1"> Don't have an account? <a [routerLink]="['/signup']" routerLinkActive="router-link-active" >Signup</a></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

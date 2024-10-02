@@ -1,0 +1,226 @@
+﻿@using CivicaShoppingAppClient.ViewModels
+@model IEnumerable<UserCartViewModel>
+@{
+            var userIdFor = Convert.ToInt32(Context.Request.Cookies["UserId"]);
+}
+<div class="container mt-4">
+    @if (!Model.Any())
+    {
+        <div class="col-md-8 offset-md-2 text-center">
+            <div class="card border-0">
+                <div class="card-body">
+                    <h3 class="card-title text-secondary">Your Cart is Empty :(</h3>
+                    <p class="card-text">Explore our products</p>
+                    <a class="btn btn-lg" asp-action="BuyProducts" asp-controller="Cart"> <i class="fa-solid fa-cart-shopping"></i> Start shopping!!</a>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+    <div class="row">
+        @foreach (var cartItem in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <h2 class="card-header text-center bgColor textWhite">@cartItem.Product.ProductName</h2>
+
+                    <div class="card-body">
+                        <p class="card-text">
+                            <i class="fas fa-hashtag"></i> Quantity:
+                    <button class="btn btn-sm ml-2 hoverPink" onclick="updateQuantity('@cartItem.Product.ProductId', '@cartItem.CartId', -1)">-</button>
+                    <span id="quantity_@cartItem.Product.ProductId">@cartItem.ProductQuantity</span>
+                    <button class="btn btn-sm hoverPink" onclick="updateQuantity('@cartItem.Product.ProductId', '@cartItem.CartId', 1)">+</button>
+                </p>
+                        <p class="card-text"><i class="fas fa-info-circle"></i> Description: @cartItem.Product.ProductDescription</p>
+                        <p class="card-text"><i class="fas fa-coins"></i> Price: @cartItem.Product.ProductPrice</p>
+                        <form method="post" action="@Url.Action("DeleteFromCart", "Cart")">
+                            <input type="hidden" name="userId" value="@userIdFor" />
+                            <input type="hidden" name="productId" value="@cartItem.ProductId" />
+                            <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete?')">
+                                <i class=" fas fa-trash-alt"></i>
+
+                            </button>
+                        </form>
+                    </div>
+                
+                </div>
+            </div>
+        }
+    </div>
+
+  
+        <div class="mt-4 text-center">
+            <a asp-action="BuyProducts" asp-controller="Cart" class="btn civicaBtn"> <i class="fa-solid fa-cart-shopping"></i> Shop More!</a>
+            <button id="placeOrderBtn" class="btn civicaBtn ml-5">Checkout</button>
+        </div>
+
+    @if (Model.Any())
+    {
+        double totalCheckoutAmount = Model.Sum(item => item.Product.FinalPrice * item.ProductQuantity);
+        <div class="mt-4 text-center">
+            <h4>Total Checkout Amount:<span class="textTeal"> ₹@totalCheckoutAmount.ToString("0.00")</span></h4>
+        </div>
+    }
+ }
+</div>
+
+<script>
+    function getJwtTokenFromCookie() {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.startsWith('jwtToken=')) {
+                return cookie.substring('jwtToken='.length);
+            }
+        }
+        return null;
+    }
+
+    function getUserIdFromCookie() {
+    // Get all cookies
+    var cookies = document.cookie.split(';');
+
+    // Loop through cookies to find userId
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        // Check if cookie starts with 'UserId='
+        if (cookie.startsWith('userId=')) {
+            // Extract and return userId value
+            return parseInt(cookie.substring('userId='.length), 10); // Parse as integer
+        }
+    }
+    return null; // Return null if userId cookie not found
+}
+
+    function updateQuantity(productId, cartId, change) {
+        var quantityElement = document.getElementById(`quantity_${productId}`);
+        var currentQuantity = parseInt(quantityElement.innerText, 10);
+        var newQuantity = currentQuantity + change;
+
+        if (newQuantity >= 1) { // Assuming quantity cannot go below 1
+            quantityElement.innerText = newQuantity;
+
+            var userId = getUserIdFromCookie();
+            var jwtToken = getJwtTokenFromCookie();
+            // Prepare data for API call
+            var data = {
+                userId: userId,
+                productId: productId,
+                cartId: cartId,
+                productQuantity: newQuantity
+            };
+
+            // Call your updateCart API
+            fetch(`http://localhost:5007/api/Cart/UpdateCart`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + jwtToken
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            throw new Error(errorData.message || 'Failed to update quantity');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    window.location.reload();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Display error message to the user
+                    alert(error.message || 'Failed to update quantity'); // Display custom error message if available, otherwise default message
+                    // Reset the quantity to its original value on error
+                    quantityElement.innerText = currentQuantity;
+                });
+        } else {
+            // Display a message if new quantity is invalid (though in your case, it should not go below 1)
+            if (confirm('Are you sure you want to remove this item from cart?')) {
+                var jwtToken = getJwtTokenFromCookie();
+                var userId = getUserIdFromCookie();
+                // var requestData = {
+                //     userId: userId,
+                //     productId: productId,
+                // }
+                $.ajax({
+                    url: "http://localhost:5007/api/Cart/RemoveParticularProductFromCart"
+                        + "?userId=" + userId
+                        + "&productId=" + productId,
+                    type: "DELETE",
+                    contentType: "application/json",
+                    // data: JSON.stringify(requestData),
+                    headers: {
+                        'Authorization': 'Bearer ' + jwtToken
+                    },
+                    success: function (response) {
+                        window.location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        // Check if there is a responseText available
+                        if (xhr.responseText) {
+                            try {
+                                // Parse the responseText into a JavaScript object
+                                var errorResponse = JSON.parse(xhr.responseText);
+
+                                // Check the properties of the errorResponse object
+                                if (errorResponse && errorResponse.message) {
+                                    // Display the error message to the user
+                                    alert('Error: ' + errorResponse.message);
+                                } else {
+                                    // Display a generic error message
+                                    alert('An error occurred. Please try again. ');
+                                }
+
+                            } catch (parseError) {
+                                console.error('Error parsing response:', parseError);
+                                alert('An error occurred. Please try again. ');
+                            }
+                        } else {
+                            // Display a generic error message if no responseText is available
+                            alert('An unexpected error occurred. Please try again. ');
+                        }
+                    },
+
+                    complete: function () {
+                        // $('#loader').hide();
+                    }
+                })
+            }
+        }
+    }
+
+    document.getElementById('placeOrderBtn').addEventListener('click', function () {
+        var userId = getUserIdFromCookie();
+        console.log(userId);
+                var jwtToken = getJwtTokenFromCookie();
+        fetch(`http://localhost:5007/api/Order/PlaceOrder/${userId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + jwtToken
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Assuming data contains order number as string in data field
+                var orderNumber = data.data; // Accessing the order number from the response
+
+                // Redirect or display order summary based on order number
+                window.location.href = '@Url.Action("OrderPlaced", "Order")?id=' + encodeURIComponent(orderNumber);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error if needed
+            });
+    });
+</script>

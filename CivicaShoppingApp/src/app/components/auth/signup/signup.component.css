@@ -1,0 +1,35 @@
+.container {
+    max-width: 600px; /* Adjust the max-width as per your design */
+    margin: auto; /* Center align the form */
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Add a subtle box shadow for depth */
+  }
+  
+  .form-label {
+    font-weight: bold; /* Make labels bold */
+  }
+  
+  .form-control {
+    margin-bottom: 10px; /* Add spacing between form controls */
+  }
+  
+  .btn-primary {
+    width: 100%; /* Make the submit button full width */
+  }
+  
+  .text-danger {
+    font-size: 0.85rem; /* Adjust error message font size */
+  }
+
+  .card-header{
+    background-color: #009CA6;
+    color: white;
+  }
+  
+  /* Compress field width */
+  @media (max-width: 768px) {
+    .form-control {
+      width: 100%; /* Make form controls full width on smaller screens */
+    }
+  }
+  

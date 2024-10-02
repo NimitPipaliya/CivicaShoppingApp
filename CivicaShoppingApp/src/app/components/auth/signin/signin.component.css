@@ -1,0 +1,22 @@
+.loginBtn{
+    color:white;
+    background-color: #7B57CB;
+
+}
+.loginBtn:hover{
+    color: white;
+    background-color: #D62598;
+}
+.card {
+    max-width: 400px; /* Limit the width of the card */
+    margin: 0 auto; /* Center the card horizontally */
+  }
+  
+  .card-header {
+    background-color: #009CA6; /* Header background color */
+  }
+  
+  .loginBtn {
+    width: 80%; /* Make login button full width */
+  }
+  

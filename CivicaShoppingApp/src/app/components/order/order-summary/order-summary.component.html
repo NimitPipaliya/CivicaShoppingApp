@@ -1,0 +1,51 @@
+<div *ngIf="loading">
+    <img src="assets/loader.gif" alt="Loading...">
+</div>
+<div class="container" *ngIf="!loading">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+
+            <h2 class="text-success text-center mb-4">Order placed successfully!</h2>
+            <p class="text-danger text-center mb-4">*Note: Orders that are not shown in order summary won't be placed. They might not be in stock.</p>
+
+            <div class="d-flex justify-content-between my-3">
+                <h3 class="flex-item-1">Order summary</h3>
+                <h4 class="flex-item-2">#{{ orderNumber }}</h4>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr *ngFor="let orderItem of orderItems">
+                        <td>{{ orderItem.product.productName }} </td>
+                        <td>x{{orderItem.orderQuantity}}</td>
+                        <td>{{ orderItem.product.finalPrice * orderItem.orderQuantity | currency: "INR" }}</td>
+                    </tr>
+                  
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2" class="text-right"><strong>Total order amount:</strong></td>
+                        <td><strong>{{ orderItems[0].orderAmount | currency: "INR" }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="text-right"><strong>Order date:</strong></td>
+                        <td>{{ orderItems[0].orderDate | date }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="d-flex justify-content-center mt-4">
+                <a routerLink="/" class="btn civicaBtnHome mx-2"><i class="fas fa-home"></i> Home</a>
+                <a routerLink="/buyProducts" class="btn civicaBtnRev mx-2"><i class="fas fa-shopping-cart"></i> Shop more!</a>
+            </div>
+
+        </div>
+    </div>
+</div>

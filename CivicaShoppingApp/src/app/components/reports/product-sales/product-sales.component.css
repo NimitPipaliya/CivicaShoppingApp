@@ -1,0 +1,99 @@
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .pagination-navigation {
+    display: flex;
+  }
+  
+  .pagination-buttons {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .page-size-selection {
+    display: flex;
+    align-items: center;
+  }
+  
+  .page-size-selection select {
+    margin-left: 10px; /* Add some spacing between the label and the select */
+  }
+
+  .custom-select {
+    border: 1px solid #ced4da; /* Add border */
+    padding: 0.375rem 2rem 0.375rem 1rem; /* Add padding */
+    font-size: 1rem; /* Set font size */
+    border-radius: 0.25rem; /* Add border radius */
+    background-color: #fff; /* Set background color */
+    background-image: none; /* Remove background image */
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; /* Add transition */
+  }
+  
+  .custom-select:focus {
+    border-color: #80bdff; /* Set border color on focus */
+    outline: 0; /* Remove outline */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Add box shadow on focus */
+  }
+
+  .fluid-container {
+    display: flex;
+    margin-bottom: 20px; 
+    margin-top: 20px;
+    /* Add margin bottom for spacing */
+  }
+  
+  .btn-margin-right {
+    margin-right: 10px; /* Add margin between buttons */
+  }
+  
+  .btn-outline-info {
+    transition: all 0.3s ease; /* Add transition effect */
+  }
+  
+  .btn-outline-info:hover {
+    background-color: #007bff; /* Change background color on hover */
+    color: #fff; /* Change text color on hover */
+  }
+
+  .arrowup,
+.arrowdown {
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.arrowup {
+    margin-bottom: 17px; 
+}
+
+.arrowdown {
+  margin-left: -10px;
+    margin-top: 0px; 
+}
+
+.selected-letter {
+  font-size: 24px;
+  font-weight: bold;
+  color: #007bff; /* Blue color */
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #007bff; /* Underline effect */
+}
+
+.btn.active {
+  background-color: #007bff; /* Blue color */
+  color: #fff; /* White text color */
+}
+
+.active-page {
+  background-color: #007bff;
+  color: #fff;
+}
+
+
+
+
+  

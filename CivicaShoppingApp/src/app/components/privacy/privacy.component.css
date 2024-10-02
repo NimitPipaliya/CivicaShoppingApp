@@ -1,0 +1,28 @@
+.privacy-page {
+    max-width: 800px;
+    margin: auto;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .privacy-page h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    
+  }
+  
+  .privacy-page h3 {
+    font-size: 1.8rem;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 5px;
+  }
+  
+  .privacy-page p {
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+ 

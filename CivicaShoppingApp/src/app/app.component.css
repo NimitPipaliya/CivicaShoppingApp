@@ -1,0 +1,82 @@
+  Custom styles for the footer
+  /* .footer {
+    background-color: #f8f9fa;
+    color: #6e6666;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    position: static;
+    bottom: -1px;
+    z-index: 1000; 
+  } */
+  /* Ensure footer is above content */
+
+  /* Ensure main content is above the footer */
+  .content {
+    padding-bottom: 60px; /* Adjust according to footer height */
+    /* margin-bottom: 60px; You can also use margin if needed */
+  }
+
+  /* Styling for main content */
+  .main-content {
+    /* Example styles for main content */
+    height: 2000px; /* Adjust height for demonstration */
+    background-color: #f0f0f0;
+    padding: 20px;
+  }
+
+  .navbar{
+    background-color:rgb(0, 166, 178);
+    color: white;
+  }
+  /* .navbar:hover{
+    background-color: rgb(0, 156, 166);
+  } */
+  
+  .navbar-brand{
+    /* background-color: white; */
+    border-radius: 8px;
+    margin-right: 2%;
+  }
+
+  ul>li>a{
+    color: white;
+  } 
+  ul>li>a:hover{
+    background-color: rgb(214, 37, 152);
+    border-radius: 8px;
+  }
+  .dropdown-item{
+    background-color: white;
+    border-radius: 8px;
+  }
+
+  .dropdown-item:hover{
+    color: white;
+    background-color: rgb(214, 37, 152);
+    border-radius: 0px;
+  }
+
+  /* footer */
+  footer{
+    position: static;
+    color: white;
+    bottom: -1px;
+    width: 100%;
+    text-align: center;
+    background-color: aliceblue;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+footer p {
+    color: black;
+}
+
+footer a {
+    color: black;
+    
+}
+
+footer a:hover{
+    color: blue;
+}

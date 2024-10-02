@@ -1,0 +1,24 @@
+<div *ngIf="loading">
+    <img src="assets/loader.gif" alt="Loading...">
+    </div>
+<div class="container" *ngIf="!loading">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="card-title text-dark">{{product.productName}}</h2>
+                    <p class="card-text text-secondary">{{product.productDescription}}</p>
+                    <div class="final-price mb-2"><i class="fas fa-shopping-cart mr-1"></i> Quantity: {{product.quantity}}</div>
+                    <div class="price mb-2"><i class="fas fa-money-bill-alt mr-1"></i> Price: {{product.productPrice | currency: "INR"}}</div>
+                    <div class="price mb-2"><i class="fas fa-money-bill-alt mr-1"></i> GST Price: {{product.gstPercentage | currency: "INR"}}</div>
+                    <div class="final-price mb-3"><i class="fas fa-money-check-alt mr-1"></i> Final Price: {{product.finalPrice | currency: "INR"}}</div>
+                    <div>
+                        <a class="btn civicaBtn btn-sm" [routerLink]="['/products/update-product/', product.productId]" routerLinkActive="router-link-active"><i class="fas fa-edit mr-1"></i> Edit</a>
+                        <a class="btn btn-danger btn-sm mx-2" (click)="confirmDelete(product.productId)"><i class="fas fa-trash-alt mr-1"></i> Delete</a>
+                        <a class="btn btn-secondary btn-sm" [routerLink]="['/products']" routerLinkActive="router-link-active"><i class="fas fa-list mr-1"></i> Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

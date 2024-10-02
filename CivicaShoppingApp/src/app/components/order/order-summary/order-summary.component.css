@@ -1,0 +1,11 @@
+.flex-wrapper {
+    display: flex;
+}
+
+.flex-item-1 {
+    flex: 10;
+}
+
+.flex-item-2 {
+    flex: 1;
+}

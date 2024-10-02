@@ -1,0 +1,39 @@
+/* Improve table responsiveness */
+.table-responsive {
+    overflow-x: auto;
+  }
+  
+  /* Adjust table header for better readability */
+  .table thead th {
+    white-space: nowrap; /* Prevent wrapping of header text */
+  }
+  
+  /* Add margin below the pagination controls for spacing */
+  .pagination {
+    margin-bottom: 20px;
+  }
+  
+  /* Adjust pagination link styling */
+  .pagination .page-link {
+    /* color: #007bff; */
+  }
+  
+  /* Styling for disabled pagination links */
+  .pagination .page-link.disabled {
+    color: #6c757d; /* Lighter text color */
+    pointer-events: none; /* Disable pointer events */
+  }
+  
+  /* Style for active pagination link */
+  .pagination .page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+  }
+  
+  /* Adjust spacing between pagination controls and page size selection */
+  .pagination,
+  .form-inline {
+    margin-top: 10px; /* Add some space at the top */
+  }
+  
